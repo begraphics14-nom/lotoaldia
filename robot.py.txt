@@ -1,0 +1,66 @@
+import requests
+from bs4 import BeautifulSoup
+import json
+from datetime import datetime
+
+print("Iniciando el robot de extracción...")
+
+# 1. La página que vamos a leer
+url = "https://loteriasdominicanas.com/"
+
+# Fingimos ser un navegador real (como Chrome) para que la página no nos bloquee
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+}
+
+try:
+    # 2. El robot entra a la página
+    respuesta = requests.get(url, headers=headers)
+    respuesta.raise_for_status() # Verifica que la página cargó bien
+    
+    # 3. Convertimos el código de la página en algo que Python pueda leer
+    sopa = BeautifulSoup(respuesta.text, 'html.parser')
+    resultados_hoy = []
+    
+    # Buscamos todas las cajas de sorteos
+    sorteos = sopa.find_all('div', class_='game-block')
+    
+    for sorteo in sorteos:
+        try:
+            # Extraemos el nombre de la lotería (Leidsa, Nacional, etc.)
+            titulo_tag = sorteo.find('a', class_='game-title') or sorteo.find('div', class_='game-title')
+            if not titulo_tag:
+                continue
+            nombre = titulo_tag.text.strip()
+            
+            # Extraemos los números ganadores
+            # En esta página, los números suelen estar dentro de etiquetas con la clase "score"
+            numeros_tags = sorteo.find_all('span', class_='score')
+            if not numeros_tags:
+                numeros_tags = sorteo.find_all('div', class_='score')
+            
+            # Limpiamos el texto para sacar solo los números
+            numeros = [n.text.strip() for n in numeros_tags if n.text.strip()]
+            
+            # Tomamos la fecha actual de la computadora
+            fecha_hoy = datetime.now().strftime("%d/%m/%Y")
+            
+            # Si encontró números para este sorteo, lo agregamos a nuestra lista
+            if numeros:
+                resultados_hoy.append({
+                    "nombre": nombre,
+                    "numeros": numeros,
+                    "fecha": fecha_hoy
+                })
+        except Exception as e:
+            # Si hay un error con un bloque en específico, que siga con el siguiente
+            continue
+            
+    # 4. Guardamos todo en tu archivo resultados.json
+    with open('resultados.json', 'w', encoding='utf-8') as archivo:
+        json.dump(resultados_hoy, archivo, ensure_ascii=False, indent=4)
+        
+    print(f"¡Éxito total! Se extrajeron y guardaron los resultados de {len(resultados_hoy)} sorteos.")
+
+except Exception as e:
+    print(f"Error al intentar conectar con la página: {e}")

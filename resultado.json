@@ -1,0 +1,17 @@
+[
+    {
+        "nombre": "Lotería Nacional", 
+        "numeros": ["14", "25", "89"], 
+        "fecha": "04/04/2026"
+    },
+    {
+        "nombre": "Leidsa Pega 3 Más", 
+        "numeros": ["05", "12", "33"], 
+        "fecha": "04/04/2026"
+    },
+    {
+        "nombre": "Loteka", 
+        "numeros": ["07", "18", "99"], 
+        "fecha": "04/04/2026"
+    }
+]

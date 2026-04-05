@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados Loterías RD</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; text-align: center; padding: 20px; }
+        .tarjeta-loteria { background: white; border-radius: 10px; padding: 20px; margin: 15px auto; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .nombre-sorteo { color: #333; margin-bottom: 5px; }
+        .numeros-ganadores { font-size: 28px; font-weight: bold; color: #d92027; letter-spacing: 3px; }
+        .fecha { color: #777; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <h1>Resultados de Loterías RD 🇩🇴</h1>
+    <p>Los números ganadores de hoy:</p>
+
+    <div id="contenedor-resultados"></div>
+
+    <script>
+        // Esta es la magia de JavaScript
+        async function mostrarResultados() {
+            // 1. Va y busca el archivo resultados.json
+            const respuesta = await fetch('resultados.json'); 
+            const datos = await respuesta.json();
+            
+            const contenedor = document.getElementById('contenedor-resultados');
+
+            // 2. Por cada lotería en el archivo, crea una tarjeta
+            datos.forEach(sorteo => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'tarjeta-loteria';
+                tarjeta.innerHTML = `
+                    <h2 class="nombre-sorteo">${sorteo.nombre}</h2>
+                    <p class="numeros-ganadores">${sorteo.numeros.join(' - ')}</p>
+                    <p class="fecha">Sorteo del: ${sorteo.fecha}</p>
+                `;
+                contenedor.appendChild(tarjeta);
+            });
+        }
+
+        // Ejecutar la función
+        mostrarResultados();
+    </script>
+
+</body>
+</html>
