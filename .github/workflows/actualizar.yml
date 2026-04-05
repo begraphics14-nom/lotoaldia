@@ -5,6 +5,10 @@ on:
     - cron: '30 1 * * *'
   workflow_dispatch:
 
+# ¡Esta es la línea mágica que apaga la advertencia!
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   actualizar:
     runs-on: ubuntu-latest
