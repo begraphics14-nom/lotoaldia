@@ -1,46 +1,287 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Resultados Loterías RD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotoAlDía - Resultados de Loterías RD</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; text-align: center; padding: 20px; }
-        .tarjeta-loteria { background: white; border-radius: 10px; padding: 20px; margin: 15px auto; max-width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-        .nombre-sorteo { color: #333; margin-bottom: 5px; }
-        .numeros-ganadores { font-size: 28px; font-weight: bold; color: #d92027; letter-spacing: 3px; }
-        .fecha { color: #777; font-size: 14px; }
+        /* Paleta de colores de la marca */
+        :root {
+            --verde-esmeralda: #1A531A;
+            --verde-claro: #2c7a2c;
+            --dorado: #D4AF37;
+            --fondo: #f4f7f5;
+            --texto-oscuro: #333333;
+            --texto-claro: #ffffff;
+            --whatsapp: #25D366;
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--fondo); 
+            color: var(--texto-oscuro);
+            margin: 0;
+            padding: 0;
+            text-align: center; 
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 1. Cabecera (Header) */
+        header {
+            background-color: var(--verde-esmeralda);
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--texto-claro);
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--dorado);
+        }
+
+        /* 2. Generador de Suerte (Hero Section) */
+        .seccion-hero {
+            background: linear-gradient(135deg, var(--verde-esmeralda), var(--verde-claro));
+            color: white;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .seccion-hero h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: var(--dorado);
+        }
+
+        .seccion-hero p {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .btn-generar {
+            background-color: var(--dorado);
+            color: var(--texto-oscuro);
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 800;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.1s, background-color 0.2s;
+            font-family: 'Montserrat', sans-serif;
+            margin-top: 15px;
+        }
+
+        .btn-generar:active {
+            transform: scale(0.95);
+        }
+
+        /* 3. Contenedor de Resultados */
+        .titulo-resultados {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--verde-esmeralda);
+            margin-bottom: 25px;
+        }
+
+        #contenedor-resultados {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 0 20px 40px 20px;
+            flex-grow: 1; /* Empuja el footer hacia abajo */
+        }
+
+        /* Tarjetas Premium */
+        .tarjeta-loteria { 
+            background: white; 
+            border-radius: 15px; 
+            padding: 25px 20px; 
+            width: 100%;
+            max-width: 320px; 
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05); 
+            border-top: 5px solid var(--verde-esmeralda); 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .nombre-sorteo { 
+            color: var(--verde-esmeralda); 
+            font-weight: 800;
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 15px; 
+        }
+
+        .numeros-ganadores { 
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .numero-bola {
+            background-color: var(--dorado);
+            color: white;
+            font-size: 22px;
+            font-weight: 800;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 6px rgba(212, 175, 55, 0.4);
+        }
+
+        .fecha { 
+            color: #888; 
+            font-size: 13px; 
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* 4. Botón de Compartir en WhatsApp */
+        .btn-whatsapp {
+            background-color: var(--whatsapp);
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #1ebe57;
+        }
+
+        /* 5. Pie de Página (Footer) */
+        footer {
+            background-color: var(--texto-oscuro);
+            color: white;
+            padding: 20px;
+            font-size: 12px;
+            margin-top: auto; /* Se asegura de estar siempre abajo */
+        }
+
+        footer p {
+            margin: 5px 0;
+            color: #aaa;
+        }
+
+        footer span {
+            color: var(--dorado);
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Resultados de Loterías RD 🇩🇴</h1>
-    <p>Los números ganadores de hoy:</p>
+    <header>
+        <h1 class="logo">Loto<span>AlDía</span></h1>
+    </header>
 
-    <div id="contenedor-resultados"></div>
+    <div class="seccion-hero">
+        <h2>🍀 Generador de la Suerte</h2>
+        <p>¿No sabes qué jugar hoy? Genera tu palé o tripleta aquí:</p>
+        <div id="numeros-suerte" class="numeros-ganadores">
+            </div>
+        <button class="btn-generar" onclick="generarSuerte()">Generar mi jugada</button>
+    </div>
+
+    <h2 class="titulo-resultados">Resultados de Hoy 🇩🇴</h2>
+
+    <div id="contenedor-resultados">
+        <p>Cargando los últimos resultados...</p>
+    </div>
+
+    <footer>
+        <p><span>LotoAlDía</span> &copy; 2026 - Todos los derechos reservados.</p>
+        <p>Juega con responsabilidad. No somos una página oficial de loterías, solo informamos los resultados para tu comodidad.</p>
+    </footer>
 
     <script>
-        // Esta es la magia de JavaScript
-        async function mostrarResultados() {
-            // 1. Va y busca el archivo resultados.json
-            const respuesta = await fetch('resultados.json'); 
-            const datos = await respuesta.json();
+        // Función 1: Generador de Números Aleatorios
+        function generarSuerte() {
+            const contenedorSuerte = document.getElementById('numeros-suerte');
+            contenedorSuerte.innerHTML = ''; // Limpiar anterior
             
-            const contenedor = document.getElementById('contenedor-resultados');
-
-            // 2. Por cada lotería en el archivo, crea una tarjeta
-            datos.forEach(sorteo => {
-                const tarjeta = document.createElement('div');
-                tarjeta.className = 'tarjeta-loteria';
-                tarjeta.innerHTML = `
-                    <h2 class="nombre-sorteo">${sorteo.nombre}</h2>
-                    <p class="numeros-ganadores">${sorteo.numeros.join(' - ')}</p>
-                    <p class="fecha">Sorteo del: ${sorteo.fecha}</p>
-                `;
-                contenedor.appendChild(tarjeta);
-            });
+            // Generar 3 números aleatorios entre 0 y 99
+            for (let i = 0; i < 3; i++) {
+                let numero = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+                contenedorSuerte.innerHTML += `<div class="numero-bola">${numero}</div>`;
+            }
         }
 
-        // Ejecutar la función
+        // Mostrar números de la suerte al cargar la página la primera vez
+        generarSuerte();
+
+        // Función 2: Cargar Resultados y Crear Botones de WhatsApp
+        async function mostrarResultados() {
+            try {
+                // Agregar un sufijo de tiempo evita que el navegador use caché viejo
+                const respuesta = await fetch('resultados.json?' + new Date().getTime()); 
+                const datos = await respuesta.json();
+                
+                const contenedor = document.getElementById('contenedor-resultados');
+                contenedor.innerHTML = ''; 
+
+                if (datos.length === 0) {
+                    contenedor.innerHTML = '<p>No se encontraron resultados para hoy todavía.</p>';
+                    return;
+                }
+
+                datos.forEach(sorteo => {
+                    const tarjeta = document.createElement('div');
+                    tarjeta.className = 'tarjeta-loteria';
+                    
+                    // Convertir números en bolitas visuales
+                    let bolasHTML = '';
+                    sorteo.numeros.forEach(num => {
+                        bolasHTML += `<div class="numero-bola">${num}</div>`;
+                    });
+
+                    // Armar el mensaje exacto para WhatsApp
+                    const mensajeTexto = `🍀 *LotoAlDía*\n\n🎰 Sorteo: ${sorteo.nombre}\n🔴 Números: ${sorteo.numeros.join(' - ')}\n\nMira todos los resultados de hoy en:\n🌐 lotoaldia.com`;
+                    const linkWhatsApp = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensajeTexto)}`;
+
+                    tarjeta.innerHTML = `
+                        <div>
+                            <h2 class="nombre-sorteo">${sorteo.nombre}</h2>
+                            <p class="fecha">Sorteo del: ${sorteo.fecha}</p>
+                            <div class="numeros-ganadores">${bolasHTML}</div>
+                        </div>
+                        <a href="${linkWhatsApp}" class="btn-whatsapp" target="_blank">📲 Compartir en WhatsApp</a>
+                    `;
+                    contenedor.appendChild(tarjeta);
+                });
+            } catch (error) {
+                document.getElementById('contenedor-resultados').innerHTML = '<p>Error buscando los resultados. Intenta recargar la página.</p>';
+                console.error("Error", error);
+            }
+        }
+
+        // Ejecutar carga de resultados
         mostrarResultados();
     </script>
 
