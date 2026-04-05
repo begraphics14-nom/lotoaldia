@@ -1,0 +1,33 @@
+name: Actualizar Resultados Lotería
+
+on:
+  schedule:
+    # Esto corre a la 1:30 AM UTC, que son las 9:30 PM en República Dominicana
+    - cron: '30 1 * * *'
+  workflow_dispatch: # ¡Esto crea un botón para activarlo manualmente!
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v3
+
+      - name: Instalar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar librerías
+        run: pip install requests beautifulsoup4
+
+      - name: Ejecutar el Robot
+        run: python robot.py
+
+      - name: Guardar los nuevos números
+        run: |
+          git config --global user.name "Robot LotoAlDia"
+          git config --global user.email "robot@lotoaldia.com"
+          git add resultados.json
+          git commit -m "Actualizando resultados diarios" || exit 0
+          git push
